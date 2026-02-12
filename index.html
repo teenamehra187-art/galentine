@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Galentine? 💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-primary: #FFADCB; /* */
+            --pink-dark: #FF85B3;    /* */
+            --lavender: #D4C1EC;     /* */
+            --cream: #FFF9FB;        /* */
+            --text-color: #7A5C61;   /* */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cream);
+            color: var(--text-color);
+            overflow-x: hidden;
+            scroll-behavior: smooth; /* */
+        }
+
+        /* Ambient Floating Hearts */
+        .heart {
+            position: fixed;
+            top: -10%;
+            font-size: 20px;
+            color: var(--pink-dark);
+            user-select: none;
+            pointer-events: none;
+            z-index: 1000;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+
+        /* Memories Carousel Section */
+        .carousel { display: flex; gap: 20px; overflow-x: auto; padding: 40px 20px; width: 100%; scrollbar-width: none; }
+        
+        .memory-card {
+            min-width: 280px;
+            background: white;
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(255, 173, 203, 0.3);
+            border: 3px dashed var(--pink-primary); /* Stylish Border Design */
+            transition: 0.3s;
+        }
+
+        .memory-img { 
+            width: 100%; 
+            height: 250px; 
+            object-fit: cover; 
+            border-radius: 20px; 
+            margin-bottom: 15px;
+            border: 4px solid var(--cream); /* Inner Border for Photos */
+        }
+
+        /* Buttons and Landing */
+        .btn-container { position: relative; height: 120px; width: 100%; max-width: 400px; margin-top: 20px; }
+        .btn { padding: 15px 35px; font-size: 1.2rem; border-radius: 50px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .yes-btn { background: var(--pink-dark); color: white; }
+        .no-btn { background: var(--lavender); position: absolute; } /* Evasive "No" Button */
+
+        #celebration { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--cream); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="landing">
+        <h1 style="font-size: 3rem; color: var(--pink-dark);">Will You Be My Galentine? 🎀</h1>
+        <button class="btn yes-btn" onclick="document.getElementById('memories').scrollIntoView()">Let's See! ✨</button>
+    </section>
+
+    <section id="memories">
+        <h2 style="font-size: 2.5rem;">Heartfelt Memories ✨</h2>
+        <div class="carousel">
+            <div class="memory-card">
+                <img src="Snapchat-1843248143.jpg" class="memory-img">
+                <span style="font-size: 2rem;">😂</span>
+                <h3>Best Times</h3>
+                <p>Kitni masti ki thi humne! 💖</p>
+            </div>
+            <div class="memory-card">
+                <img src="Screenshot_20260212_171238_Photos.jpg" class="memory-img">
+                <span style="font-size: 2rem;">🥰</span>
+                <h3>Special Day</h3>
+                <p>Ye yaad hamesha rahegi. ✨</p>
+            </div>
+            <div class="memory-card">
+                <img src="Screenshot_20260212_171338_Photos.jpg" class="memory-img">
+                <span style="font-size: 2rem;">💖</span>
+                <h3>Together Forever</h3>
+                <p>Hamesha aise hi rehna! 🎀</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h1 style="font-size: 2.5rem;">So, what do you say?</h1>
+        <div class="btn-container">
+            <button class="btn yes-btn" onclick="startCelebration()">YES! 😍</button>
+            <button class="btn no-btn" id="noBtn">No 🥺</button>
+        </div>
+    </section>
+
+    <div id="celebration">
+        <h1 style="font-size: 4rem; color: var(--pink-dark);">🎉 YAYYY! 🎉</h1>
+        <p><strong>When:</strong> Whenever you want jaanemann</p>
+        <p><strong>Where:</strong> Our favorite spot</p>
+    </div>
+
+    <script>
+        // Floating Hearts Logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Evasive "No" Button Logic
+        const noBtn = document.getElementById('noBtn');
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
+
+        // Dare Message for "No" click
+        noBtn.addEventListener('click', () => {
+            alert("Don't you dare to do that! 😤");
+        });
+
+        // Celebration and Music Logic
+        function startCelebration() {
+            document.getElementById('celebration').style.display = 'flex';
+            document.getElementById('bgMusic').play();
+            confetti({ 
+                particleCount: 200, 
+                spread: 80, 
+                origin: { y: 0.6 },
+                colors: ['#FFADCB', '#FF85B3', '#D4C1EC']
+            });
+        }
+    </script>
+</body>
+</html>

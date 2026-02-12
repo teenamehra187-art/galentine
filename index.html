@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Galentine? 💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --pink-primary: #FFADCB;
+            --pink-dark: #FF85B3;
+            --lavender: #D4C1EC;
+            --cream: #FFF9FB;
+            --text-color: #7A5C61;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cream);
+            color: var(--text-color);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Floating Hearts Ambient */
+        .heart { position: fixed; top: -10%; font-size: 20px; color: var(--pink-dark); z-index: 1000; animation: fall linear forwards; pointer-events: none; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        section { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+
+        /* Landing Styling */
+        .sub-text { margin-top: 15px; font-style: italic; color: var(--pink-dark); font-size: 1.2rem; }
+
+        /* Memories Carousel */
+        .carousel { display: flex; gap: 20px; overflow-x: auto; padding: 40px; width: 100%; scrollbar-width: none; }
+        .memory-card {
+            min-width: 300px;
+            background: white;
+            padding: 15px;
+            border-radius: 20px;
+            border: 3px solid var(--pink-primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .memory-img { width: 100%; height: 350px; object-fit: contain; background: #fff; border-radius: 15px; margin-bottom: 10px; }
+
+        /* Buttons */
+        .btn-container { position: relative; height: 120px; width: 100%; max-width: 400px; margin-top: 20px; }
+        .btn { padding: 15px 35px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .yes-btn { background: var(--pink-dark); color: white; }
+        .no-btn { background: var(--lavender); position: absolute; }
+
+        /* Celebration Screen */
+        #celebration { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: radial-gradient(circle, #FFF9FB 0%, #FFADCB 100%); 
+            z-index: 2000; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .celebration-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid var(--pink-dark);
+            transform: scale(0);
+            animation: popIn 0.5s forwards 0.5s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { to { transform: scale(1); } }
+
+        .detail-item { margin: 15px 0; font-size: 1.3rem; color: var(--text-color); }
+        .detail-item strong { color: var(--pink-dark); text-transform: uppercase; letter-spacing: 1px; }
+
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop><source src="song.mp3" type="audio/mpeg"></audio>
+
+    <section id="landing">
+        <h1 style="font-size: 3rem; color: var(--pink-dark); margin-bottom: 10px;">Will You Be My Galentine? 🎀</h1>
+        <button class="btn yes-btn" onclick="goToMemories()">Let's See! ✨</button>
+        <p class="sub-text">Cuz everything is better when am with u 😘🎀🎀</p>
+    </section>
+
+    <section id="memories">
+        <h2 style="font-size: 2.5rem;">Heartfelt Memories ✨</h2>
+        <div class="carousel">
+            <div class="memory-card"><img src="Snapchat-1843248143.jpg" class="memory-img"><p>Masti Moments 😂</p></div>
+            <div class="memory-card"><img src="Screenshot_20260212_171238_Photos.jpg" class="memory-img"><p>Sweet Memories 🥰</p></div>
+            <div class="memory-card"><img src="Screenshot_20260212_191634_Photos.jpg" class="memory-img"><p>Together ✨</p></div>
+            <div class="memory-card"><img src="Screenshot_20260212_171338_Photos.jpg" class="memory-img"><p>Forever 💖</p></div>
+        </div>
+    </section>
+
+    <section>
+        <h1 style="font-size: 2.5rem;">So, what do you say?</h1>
+        <div class="btn-container">
+            <button class="btn yes-btn" onclick="startCelebration()">YES! 😍</button>
+            <button class="btn no-btn" id="noBtn">No 🥺</button>
+        </div>
+    </section>
+
+    <div id="celebration">
+        <h1 style="font-size: 3.5rem; color: var(--pink-dark); margin-bottom: 20px;">🎉 YAYYY! 🎉</h1>
+        <div class="celebration-card">
+            <div class="detail-item"><strong>When:</strong> Whenever you want jaanemann</div>
+            <div class="detail-item"><strong>Where:</strong> Our favorite spot</div>
+        </div>
+        <p style="margin-top: 20px; font-weight: bold;">I Love You! ❤️</p>
+    </div>
+
+    <script>
+        // Floating Hearts
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = ['❤️', '💖', '🌸', '✨'][Math.floor(Math.random() * 4)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, 300);
+
+        function goToMemories() {
+            document.getElementById('memories').scrollIntoView();
+            document.getElementById('bgMusic').play().catch(e => console.log("Music click needed"));
+        }
+
+        // No Button Masti
+        const noBtn = document.getElementById('noBtn');
+        let noCount = 0;
+        noBtn.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 100);
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
+
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            if(noCount === 1) alert("Don't u dare 😤");
+            else alert("Plz dont babygurl 🥺");
+        });
+
+        // Yes Celebration with Burst Effect
+        function startCelebration() {
+            document.getElementById('celebration').style.display = 'flex';
+            
+            // Confetti Cannon
+            confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 }, colors: ['#FFADCB', '#FF85B3', '#D4C1EC'] });
+            
+            // Heart Burst Effect
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 10,
+                        angle: Math.random() * 360,
+                        spread: 50,
+                        origin: { x: Math.random(), y: Math.random() },
+                        colors: ['#FF0000', '#FF69B4']
+                    });
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
